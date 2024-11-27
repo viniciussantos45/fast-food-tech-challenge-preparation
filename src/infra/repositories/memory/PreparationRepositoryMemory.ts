@@ -2,7 +2,7 @@ import { PreparationDTO } from '@/core/dtos/PreparationDTO'
 import { IPreparationRepository } from '@/core/repositories/PreparationRepository'
 
 export class PreparationRepositoryMemory implements IPreparationRepository {
-  private preparations: PreparationDTO[] = []
+  public preparations: PreparationDTO[] = []
 
   async savePreparation(preparation: PreparationDTO): Promise<PreparationDTO> {
     preparation.id = (this.preparations.length + 1).toString()

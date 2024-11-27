@@ -16,25 +16,40 @@ export class PreparationUseCase {
     return new Preparation(
       preparation.orderId,
       new PreparationDetails(new Combo()),
-      PreparationStatus.IN_PROGRESS,
+      PreparationStatus[preparation.status as keyof typeof PreparationStatus],
       preparation.createdAt
     )
   }
 
   public async createPreparation(orderId: string, details: PreparationDetails): Promise<Preparation> {
     const preparation = new Preparation(orderId, details, PreparationStatus.PENDING, new Date())
-    return this.toDomain(
-      await this.preparationRepository.savePreparation({
-        orderId: preparation.getOrderId(),
-        details: preparation.getDetails(),
-        status: preparation.getStatus(),
-        createdAt: preparation.getCreatedAt()
-      })
-    )
+
+    const savePreparation = await this.preparationRepository.savePreparation({
+      orderId: preparation.getOrderId(),
+      details: preparation.getDetails(),
+      status: preparation.getStatus(),
+      createdAt: preparation.getCreatedAt()
+    })
+
+    const preparationId = savePreparation.id
+
+    if (!preparationId) {
+      throw new Error('Preparation ID is null')
+    }
+
+    const preparationEntity = this.toDomain(savePreparation)
+
+    preparationEntity.setId(preparationId)
+
+    return preparationEntity
   }
 
   public async getPreparationById(preparationId: string): Promise<Preparation> {
-    return this.toDomain(await this.preparationRepository.getPreparationById(preparationId))
+    const preparationEntity = this.toDomain(await this.preparationRepository.getPreparationById(preparationId))
+
+    preparationEntity.setId(preparationId)
+
+    return preparationEntity
   }
 
   public async listPreparations(): Promise<Preparation[]> {
