@@ -54,16 +54,8 @@ export const startWebServerApp = async () => {
         ],
         tags: [
           {
-            name: 'cliente',
-            description: 'Endpoints que lidam com informações cliente'
-          },
-          {
-            name: 'produtos',
-            description: 'Endpoints que lidam com informações de produtos'
-          },
-          {
-            name: 'pedido',
-            description: 'Endpoints que lidam com informações de pedidos'
+            name: 'preparação',
+            description: 'Endpoints que lidam com informações de preparação'
           }
         ],
         components: {
