@@ -1,0 +1,31 @@
+# dependencies
+/node_modules
+
+# IDE
+/.idea
+/.awcache
+/.vscode
+
+# misc
+npm-debug.log
+.DS_Store
+
+# example
+/quick-start
+
+# tests
+/test
+/coverage
+/.nyc_output
+
+# dist
+/dist
+
+# environment
+.env
+
+# certs
+/certs
+
+# yarn
+.yarn/*
