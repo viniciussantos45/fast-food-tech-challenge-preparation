@@ -11,11 +11,17 @@ services:
       - 3000:3000
 
   mongo:
-    image: mongo:latest
+    build:
+      context: ./mongodb_rs
+      args:
+        MONGO_VERSION: 6
     container_name: mongo_container
     environment:
+      MONGO_REPLICA_HOST: localhost
+      MONGO_REPLICA_PORT: 27017
       MONGO_INITDB_ROOT_USERNAME: fast-food
       MONGO_INITDB_ROOT_PASSWORD: strongpassword
+      MONGO_COMMAND: 'mongosh'
     ports:
       - '27017:27017'
     volumes:
@@ -28,3 +34,4 @@ services:
 
 volumes:
   mongo_data:
+    driver: local

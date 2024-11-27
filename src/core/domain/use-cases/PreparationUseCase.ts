@@ -1,4 +1,6 @@
+import { PreparationDTO } from '@/core/dtos/PreparationDTO'
 import { IPreparationRepository } from '@/core/repositories/PreparationRepository'
+import { Combo } from '@/shared-kernel/entities/Combo'
 import { Preparation } from '../entities/Preparation'
 import { PreparationDetails } from '../value-objects/PreparationDetails'
 import { PreparationStatus } from '../value-objects/PreparationStatus'
@@ -10,33 +12,71 @@ export class PreparationUseCase {
     this.preparationRepository = preparationRepository
   }
 
+  private toDomain(preparation: PreparationDTO): Preparation {
+    return new Preparation(
+      preparation.orderId,
+      new PreparationDetails(new Combo()),
+      PreparationStatus.IN_PROGRESS,
+      preparation.createdAt
+    )
+  }
+
   public async createPreparation(orderId: string, details: PreparationDetails): Promise<Preparation> {
-    const preparation = new Preparation(orderId, details, PreparationStatus.PENDING, 'system', new Date())
-    return this.preparationRepository.savePreparation(preparation)
+    const preparation = new Preparation(orderId, details, PreparationStatus.PENDING, new Date())
+    return this.toDomain(
+      await this.preparationRepository.savePreparation({
+        orderId: preparation.getOrderId(),
+        details: preparation.getDetails(),
+        status: preparation.getStatus(),
+        createdAt: preparation.getCreatedAt()
+      })
+    )
   }
 
   public async getPreparationById(preparationId: string): Promise<Preparation> {
-    return this.preparationRepository.getPreparationById(preparationId)
+    return this.toDomain(await this.preparationRepository.getPreparationById(preparationId))
   }
 
   public async listPreparations(): Promise<Preparation[]> {
-    return this.preparationRepository.listPreparations()
+    return (await this.preparationRepository.listPreparations()).map(this.toDomain)
   }
 
   public async updatePreparationStatus(preparationId: string, status: PreparationStatus): Promise<Preparation> {
-    const preparation = await this.preparationRepository.getPreparationById(preparationId)
+    const preparation = this.toDomain(await this.preparationRepository.getPreparationById(preparationId))
+
     preparation.setStatus(status)
-    return this.preparationRepository.updatePreparation(preparation)
+
+    await this.preparationRepository.updatePreparation({
+      id: preparationId,
+      orderId: preparation.getOrderId(),
+      details: preparation.getDetails(),
+      status: preparation.getStatus(),
+      createdAt: preparation.getCreatedAt()
+    })
+
+    return preparation
   }
 
   public async updatePreparationDetails(preparationId: string, details: PreparationDetails): Promise<Preparation> {
-    const preparation = await this.preparationRepository.getPreparationById(preparationId)
+    const preparation = this.toDomain(await this.preparationRepository.getPreparationById(preparationId))
+
     preparation.setDetails(details)
-    return this.preparationRepository.updatePreparation(preparation)
+
+    await this.preparationRepository.updatePreparation({
+      id: preparationId,
+      orderId: preparation.getOrderId(),
+      details: preparation.getDetails(),
+      status: preparation.getStatus(),
+      createdAt: preparation.getCreatedAt()
+    })
+
+    return preparation
   }
 
   public async deletePreparation(preparationId: string): Promise<void> {
     const preparation = await this.preparationRepository.getPreparationById(preparationId)
-    return this.preparationRepository.deletePreparation(preparation)
+    if (preparation && preparation.id) {
+      return await this.preparationRepository.deletePreparation(preparation.id)
+    }
   }
 }

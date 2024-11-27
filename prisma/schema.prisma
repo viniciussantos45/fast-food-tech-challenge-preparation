@@ -9,7 +9,7 @@ datasource db {
 
 model Preparation {
   id      String @id @default(auto()) @map("_id") @db.ObjectId
-  orderId String @db.ObjectId
+  orderId String
   details Json
   status  String
 

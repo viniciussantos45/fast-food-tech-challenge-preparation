@@ -1,11 +1,7 @@
 import { FastifyInstance } from 'fastify'
 
-import { customerRoutes } from './CustomerRoutes'
-import { orderRoutes } from './OrderRoutes'
-import { productRoutes } from './ProductRoutes'
+import { preparationRoutes } from './PreparationRoutes'
 
 export const registerRoutes = (fastify: FastifyInstance): void => {
-  customerRoutes(fastify)
-  productRoutes(fastify)
-  orderRoutes(fastify)
+  preparationRoutes(fastify)
 }
