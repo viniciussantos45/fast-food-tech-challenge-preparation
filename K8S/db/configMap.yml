@@ -1,8 +1,8 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: postgres-config
+  name: mongo-config
 data:
-  POSTGRES_USER: fast-food
-  POSTGRES_PASSWORD: strongpassword
-  POSTGRES_DB: fast-food
+  MONGO_INITDB_ROOT_USERNAME: fast-food
+  MONGO_INITDB_ROOT_PASSWORD: strongpassword
+  MONGO_REPLICA_SET: rs0

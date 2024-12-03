@@ -1,29 +1,29 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: postgres-deployment
+  name: mongo-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: postgres
+      app: mongo
   template:
     metadata:
       labels:
-        app: postgres
+        app: mongo
     spec:
       volumes:
-        - name: postgres-pv-storage
+        - name: mongo-pv-storage
           persistentVolumeClaim:
-            claimName: postgres-pvc
+            claimName: mongo-pvc
       containers:
-        - name: postgres
-          image: postgres:alpine3.20
+        - name: mongo
+          image: mongo:6
           ports:
-            - containerPort: 5432
+            - containerPort: 27017
           envFrom:
             - configMapRef:
-                name: postgres-config
+                name: mongo-config
           resources:
             requests:
               cpu: 10m
@@ -33,6 +33,6 @@ spec:
               memory: 256Mi
           readinessProbe:
             exec:
-              command: ['sh', '-c', 'pg_isready -U $POSTGRES_USER']
+              command: ["sh", "-c", "mongo --eval \"db.adminCommand('ping')\""]
             initialDelaySeconds: 10
             periodSeconds: 5
