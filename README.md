@@ -1,6 +1,6 @@
-# FAST FOOD TECH CHALLENGE
+# FAST FOOD TECH CHALLENGE - FASE 4
 
-# docker #node #yarn #typescript #fastify #prisma #postgres
+## Microsservice - PREPARATION
 
 This project is an API for a fast food system.
 
@@ -10,7 +10,7 @@ This project is an API for a fast food system.
 
 ## Video
 
-[Link to video that explain this project](https://www.youtube.com/watch?v=Swbv0xAlRPw)
+[Link to video that explain this project](https://www.youtube.com/watch?v=rlWsCU_idOI)
 
 ## Structure
 
@@ -397,6 +397,10 @@ yarn test:cucumber
 ### Infra and Pipelines
 
 ![Infra Cloud and pipelines](./docs/Diagram-infra.png)
+
+### Microsservices Flow Diagram
+
+![Flow Diagram](./docs/Diagrama%20de%20fluxo%20-%20microsservices%20.svg)
 
 ## GitHub Actions Workflow
 
